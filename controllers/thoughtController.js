@@ -25,8 +25,19 @@ module.exports = {
     },
     async createThought(req, res) {
         try {
+            const user = await User.findOne({ _id: req.body.userId });
+
+            if(!user){
+                return res.status(404).json({ message: 'No user with this ID found'});
+            }
+
             const thought = await Thought.create(req.body);
-            res.json(thought)
+
+            user.thoughts.push(thought._id);
+
+            await user.save();
+
+            res.json(thought);
         } catch (error) {
             res.status(500).json(error)
         }
