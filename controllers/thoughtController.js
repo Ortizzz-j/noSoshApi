@@ -26,7 +26,7 @@ module.exports = {
     async createThought(req, res) {
         try {
 
-            const thought = Thought.create(req.body);
+            Thought.create(req.body);
 
             const user = await User.findOne({ _id: req.body.userId });
 
