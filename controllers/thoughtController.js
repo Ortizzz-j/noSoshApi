@@ -27,24 +27,24 @@ module.exports = {
         try {
 
             Thought.create(req.body)
-            .then(
-                 user.findOneAndUpdate(
+            .then( data => {
+                 User.findOneAndUpdate(
                     { _id: req.body.userId },
                     { $push: { thoughts: _id } },
                     { new: true }
-            ))
+            )})
 
-            const user = await User.findOne({ _id: req.body.userId });
+            // const user = await User.findOne({ _id: req.body.userId });
 
-            if(!user){
-                return res.status(404).json({ message: 'No user with this ID found'});
-            }
+            // if(!user){
+            //     return res.status(404).json({ message: 'No user with this ID found'});
+            // }
 
-            usersThought = await user.thoughts.push(thought._id);
+            // usersThought = await user.thoughts.push(thought._id);
 
-            await user.save();
+            // await user.save();
 
-            res.json(usersThought);
+            // res.json(usersThought);
         } catch (error) {
             res.status(500).json(error)
         }
