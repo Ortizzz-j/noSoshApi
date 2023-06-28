@@ -28,11 +28,11 @@ module.exports = {
 
             Thought.create(req.body)
             .then(
-                return user.findOneAndUpdate(
+                 user.findOneAndUpdate(
                     { _id: req.body.userId },
                     { $push: { thoughts: _id } },
                     { new: true }
-            )
+            ))
 
             const user = await User.findOne({ _id: req.body.userId });
 
