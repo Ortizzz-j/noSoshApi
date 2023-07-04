@@ -35,4 +35,36 @@ module.exports = {
             res.status(500).json(error)
         }
     },
+
+    async deleteUser(req, res) {
+        try {
+            const user = await User.findOneAndDelete({ _id: req.params.userId });
+
+            if (!user) {
+                return res.status(404).json({ message: 'This is not the user you\'re looking for' });
+            }
+        } catch (error) {
+            res.status(500).json(error)
+        }
+    },
+    async updateUser(req, res) {
+        try {
+            const userUp = User.findOneAndUpdate(
+                { _id: req.params.userId },
+                { $set: req.body },
+                { new: true }
+            );
+
+            if (!userUp) {
+                return res.status(404).json({ message: 'This is not the user you\'re looking for' });
+            }
+        } catch (error) {
+            res.status(500).json(error)
+        }
+    }
+
 }
+/* 
+Todo:
+-create Post and Delete routes for friends
+*/

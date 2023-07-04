@@ -23,31 +23,26 @@ module.exports = {
             res.status(500).json(error);
         }
     },
-    async createThought(req, res) {
-        try {
+    createThought(req, res) {
 
-            Thought.create(req.body)
-            .then( data => {
-                 User.findOneAndUpdate(
-                    { _id: req.body.userId },
-                    { $push: { thoughts: _id } },
+        return Thought.create(req.body)
+            .then(data => {
+                return User.findOneAndUpdate(
+                    { username: req.body.username },
+                    { $push: { thoughts: data._id } },
                     { new: true }
-            )})
+                )
+            })
+            .then(data => {
+                console.log(data);
+                if (!data) {
+                    return res.status(404).json({ message: 'Thought created but no user with this username' }
+                    );
+                }
+                return res.status(201).json(data);
+            })
+            .catch(err => res.json(err));
 
-            // const user = await User.findOne({ _id: req.body.userId });
-
-            // if(!user){
-            //     return res.status(404).json({ message: 'No user with this ID found'});
-            // }
-
-            // usersThought = await user.thoughts.push(thought._id);
-
-            // await user.save();
-
-            // res.json(usersThought);
-        } catch (error) {
-            res.status(500).json(error)
-        }
     },
     async forgetThought(req, res) {
         try {
@@ -62,7 +57,7 @@ module.exports = {
             res.status(500).json(error)
         }
     },
-    async updateThought(req, res){
+    async updateThought(req, res) {
         try {
             const thought = await Thought.findOneAndUpdate(
                 { _id: req.params.thoughtId },
@@ -70,29 +65,16 @@ module.exports = {
                 { runValidators: true, new: true }
             );
 
-            if(!thought){
-                return res.status(404).json({ message: 'No thought with this ID'});
+            if (!thought) {
+                return res.status(404).json({ message: 'No thought with this ID' });
             }
         } catch (error) {
             res.status(500).json(error)
         }
     }
-};
+}
 
-
- // const { userId, thoughtText } = req.body;
-
-            // const user = await User.findById(userId);
-
-            // if (!user) {
-            //     return res.status(404).json({ message: 'No user with this ID' });
-            // }
-
-            // const thought = await Thought.create({
-            //     thoughtText,
-            //     username: user.username
-                
-            // });
-
-            // user.thoughts.push(thought._id);
-            // await user.save();
+/* 
+Todo:
+-create Post and Delete routes for reactions that is stored in a single thought's reactions array field.
+*/

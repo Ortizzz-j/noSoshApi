@@ -22,7 +22,6 @@ const reactionSchema = new Schema(
     }
 );
 
-
 const thoughtSchema = new Schema(
     {
         thoughtText: {
@@ -36,10 +35,10 @@ const thoughtSchema = new Schema(
             default: Date.now
         },
         username: {
-            type: Schema.Types.ObjectId,
-            ref: 'User'
+            type: String,
+            required: true,
         },
-        reactions: [reactionSchema]
+        reactions: [reactionSchema],
     },
     {
         toJSON: {
